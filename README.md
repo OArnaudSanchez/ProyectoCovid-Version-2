@@ -1,6 +1,6 @@
 # 
 Este es un pequeño proyecto el cual muestra información sobre el Covid-19 en diferentes países.
 
-Rest Api Utilizada: https://coronavirus-19-api.herokuapp.com/countries/
+Rest Api Utilizada: https://corona-api.com/countries
 
-Y para acceder a un país en específico https://coronavirus-19-api.herokuapp.com/countries/pais
+Y para acceder a un país en específico https://corona-api.com/countries/Code
