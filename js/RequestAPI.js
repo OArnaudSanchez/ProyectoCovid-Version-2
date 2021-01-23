@@ -1,24 +1,23 @@
 export class RequestAPI{   
     constructor(){
-        this.url = `https://coronavirus-19-api.herokuapp.com/countries/`;
+        this.url = `https://corona-api.com/countries`;
     }
 
     async ObtenerPaisesSelect(){
         const request = await fetch(this.url);
 
-        const paises = await request.json();
-
+        const data = await request.json();
+        const paises = data.data;
+    
         return {
             paises
         }
     }
 
     async ConsultarPais(paisSeleccionado){
-        this.url += `${paisSeleccionado}`;
-
-        const request = await fetch(this.url);
-
-        const pais = await request.json();
+        const request = await fetch(`${this.url}/${paisSeleccionado}`);
+        const data = await request.json();
+        const pais = data.data;
         
         return {
             pais

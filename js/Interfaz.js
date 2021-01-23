@@ -7,8 +7,8 @@ export class Interfaz{
     LlenarSelectPaises(paises){
         paises.paises.forEach(pais => {
             const option = document.createElement('option');
-            option.value = pais.country;
-            option.textContent = pais.country;
+            option.value = pais.code;
+            option.textContent = pais.name;
             select.appendChild(option);
         });
     }
@@ -16,7 +16,6 @@ export class Interfaz{
     MostrarResultados(paisSeleccionado){
         const divResultado = document.getElementById('resultado');
 
-        //LImpiar los resultados anteriores
         while(divResultado.firstChild){
             divResultado.removeChild(divResultado.firstChild);
         }
@@ -24,25 +23,22 @@ export class Interfaz{
         const api = new RequestAPI();
         api.ConsultarPais(paisSeleccionado)
         .then(paises => {
-            //Destructuring al objeto
-            const {country,active,cases,casesPerOneMillion,critical,deaths,deathsPerOneMillion,
-            recovered,testsPerOneMillion,todayCases,todayDeaths,totalTests} = paises.pais;
-
+            const {code,name,today,deaths,updated_at,latest_data, calculated } = paises.pais;
+            let fechaConvertida = new Date(updated_at).toLocaleString();
+            
             const ul = document.createElement('ul');
-            ul.innerHTML = `
-                <li>Pais: ${country}</li>
-                <li>Casos Nuevos: ${todayCases}</li>
-                <li>Muertes Nuevas: ${todayDeaths}</li>
-                <li>Total de Casos Confirmados: ${cases}</li>
-                <li>Total de Muertes Confirmadas: ${deaths}</li>
-                <li>Total de Personas Recuperadas: ${recovered}</li>
-                <li>Casos Criticos: ${critical}</li>
-                <li>Total de Casos Activos: ${active}</li>
-                <li>Casos Por Millon: ${casesPerOneMillion}</li>
-                <li>Muertes por Millon: ${deathsPerOneMillion}</li>
-                <li>Pruebas por millon: ${testsPerOneMillion}</li>
-                <li>Total de pruebas realizadas: ${totalTests}</li>  
-
+            ul.innerHTML = `<strong>Ultima Actualizacion: ${fechaConvertida}</strong>
+                <li>Codigo: ${code}</li>
+                <li>Pais: ${name}</li>
+                <li>Casos Nuevos: ${today.confirmed}</li>
+                <li>Muertes Nuevas: ${today.deaths}</li>
+                <li>Total de Casos Confirmados: ${latest_data.confirmed}</li>
+                <li>Total de Muertes Confirmadas: ${latest_data.deaths}</li>
+                <li>Total de Personas Recuperadas: ${latest_data.recovered}</li>
+                <li>Casos Criticos: ${latest_data.critical}</li>
+                <li>Casos Por Millon: ${latest_data.calculated.cases_per_million_population}</li>
+                <li>Porcentaje de Muerte: ${latest_data.calculated.death_rate.toFixed(2)}%</li>
+               
             `;
             divResultado.appendChild(ul);
         });
